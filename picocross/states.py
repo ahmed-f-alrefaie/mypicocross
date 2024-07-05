@@ -38,7 +38,7 @@ def read_exomol_states_dataframe(filename: str) -> pd.DataFrame:
 
     states = pd.read_csv(
         p,
-        delim_whitespace=True,
+        sep="\s+",
         usecols=[0, 1, 2, 3],
         index_col=0,
         names=["ID", "Energy", "g_total", "J"],
@@ -54,3 +54,18 @@ def convert_exomol_states_dataframe(
     g_total = df["g_total"].values << u.dimensionless_unscaled
     J = df["J"].values.astype(np.int64)
     return energy, g_total, J
+
+
+class ExomolStates:
+
+    def __init__(self, filename: str):
+        self.filename = filename
+        self.states_df = read_exomol_states_dataframe(filename)
+        (self.energy, self.g_total, J) = convert_exomol_states_dataframe(self.states_df)
+
+    def Q(self, temperature: u.Quantity) -> u.Quantity:
+        return partition(self.energy, self.g_total, temperature)
+
+    @property
+    def df(self):
+        return self.states_df

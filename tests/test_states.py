@@ -1,4 +1,5 @@
 import pytest
+from astropy import units as u
 
 
 @pytest.fixture
@@ -37,3 +38,31 @@ def test_nopath():
 
     with pytest.raises(FileNotFoundError):
         read_exomol_states_dataframe(bad_path)
+
+
+def test_energy_conversion(exomol_state):
+    from picocross.states import (
+        read_exomol_states_dataframe,
+        convert_exomol_states_dataframe,
+    )
+    import numpy as np
+
+    df = read_exomol_states_dataframe(exomol_state)
+    energy, g_total, J = convert_exomol_states_dataframe(df)
+
+    assert len(energy) == 6
+    assert len(g_total) == 6
+    assert len(J) == 6
+
+    expected = np.array(
+        [
+            0.000000,
+            1594.873096,
+            3151.677108,
+            3657.155752,
+            4666.724999,
+            5235.220005,
+        ]
+    )
+    np.testing.assert_array_almost_equal(expected, energy.value)
+    assert energy.unit == 1 / u.cm
