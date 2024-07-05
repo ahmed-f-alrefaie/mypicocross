@@ -10,6 +10,7 @@ python = "^3.10"
 numpy = ">=1.23,<2.0"
 astropy = "^6.1.1"
 pandas = "^2.2.2"
+numba = "^0.60.0"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -17,6 +18,10 @@ sphinx = "^7.3.7"
 pytest = "^8.2.2"
 ipython = "^8.26.0"
 furo = "^2024.5.6"
+jupyterlab = "^4.2.3"
+matplotlib = "^3.9.1"
+ipympl = "^0.9.4"
+tqdm = "^4.66.4"
 
 [build-system]
 requires = ["poetry-core"]
